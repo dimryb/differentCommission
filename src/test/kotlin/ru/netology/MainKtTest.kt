@@ -16,7 +16,6 @@ class MainKtTest {
         val commission = calcCommission(transferAmount, cardType)
 
         assertEquals(20 * ruble, commission)
-        //assertEquals(100, commission)
     }
 
     @Test
@@ -37,5 +36,25 @@ class MainKtTest {
         val commission = calcCommission(transferAmount, cardType)
 
         assertEquals(0, commission)
+    }
+
+    @Test
+    fun calcCommission_MastercardHigh() {
+        val transferAmount = 50_000 * ruble
+        val cardType= "MasterCard"
+
+        val commission = calcCommission(transferAmount, cardType, totalMonth = 95_000 * ruble)
+
+        assertEquals(320 * ruble, commission)
+    }
+
+    @Test
+    fun calcCommission_MastercardLow() {
+        val transferAmount = 50_000 * ruble
+        val cardType= "MasterCard"
+
+        val commission = calcCommission(transferAmount, cardType, totalMonth = 5_000 * ruble)
+
+        assertEquals(0 * ruble, commission)
     }
 }

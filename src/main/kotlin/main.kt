@@ -20,8 +20,7 @@ fun calcCommission(transferAmount: Int, cardType: String = "VK Pay", totalMonth:
             val commission = transferAmount * interestRate
             if (commission < minCommission) minCommission else commission.toInt()
         }
-        "VK Pay" -> 0
-        else -> 0
+        else -> 0 // "VK Pay"
     }
 }
 
