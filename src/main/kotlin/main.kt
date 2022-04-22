@@ -1,9 +1,15 @@
 const val ruble = 100
 
 fun main() {
-    val commission = calcCommission(500 * ruble, "MasterCard", 80_000 * ruble)
+    val transferAmount = 500 * ruble
+    val cardType = "MasterCard"
+    val totalMonth = 80_000 * ruble
+    val totalDay = 0
 
-    testDifferentCommission()
+    if (checkLimit(transferAmount, cardType, totalMonth, totalDay) == 0) {
+        val commission = calcCommission(transferAmount, cardType, totalMonth)
+        println("Commission: $commission")
+    }
 }
 
 fun calcCommission(transferAmount: Int, cardType: String = "VK Pay", totalMonth: Int = 0): Int {
@@ -39,34 +45,5 @@ fun checkLimit(transferAmount: Int, cardType: String, totalMonth: Int = 0, total
     }
 }
 
-fun testDifferentCommission() {
-    moneyTransfer(500 * ruble, "MasterCard", 80_000 * ruble)
-    moneyTransfer(500 * ruble, "MasterCard", 0 * ruble)
-    moneyTransfer(500 * ruble, "Мир")
-    moneyTransfer(500 * ruble, "Мир", totalDay = 150_001 * ruble)
-    moneyTransfer(500 * ruble, "Visa", totalMonth = 600_001 * ruble)
-    moneyTransfer(15_001 * ruble, "VK Pay")
-    moneyTransfer(15_000 * ruble, "VK Pay", totalMonth = 43_000 * ruble)
-}
-
-fun moneyTransfer(transferAmount: Int, cardType: String, totalMonth: Int = 0, totalDay: Int = 0) {
-    when (val checkCode = checkLimit(transferAmount, cardType, totalMonth, totalDay)) {
-        0 -> {
-            val commission = calcCommission(transferAmount, cardType, totalMonth)
-            println(
-                "Комиссия за перевод ${rubleToString(transferAmount)} по карте $cardType составляет " +
-                        "${rubleToString(commission)} при сумме за месяц ${rubleToString(totalMonth)}"
-            )
-        }
-        -1 -> println("Перевод ${rubleToString(transferAmount)} по карте $cardType не возможен: превышен суточный лимит")
-        -2, -4 -> println("Перевод ${rubleToString(transferAmount)} по карте $cardType не возможен: превышен месячный лимит")
-        -3 -> println("Перевод ${rubleToString(transferAmount)} по карте $cardType не возможен: превышена максимальная сумма перевода")
-        else -> println("Перевод ${rubleToString(transferAmount)} по карте $cardType не возможен, код: $checkCode")
-    }
-}
-
-fun rubleToString(amount: Int): String {
-    return String.format("%d.%02d₽", amount / ruble, amount % ruble)
-}
 
 
